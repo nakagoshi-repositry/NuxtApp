@@ -1,53 +1,66 @@
 <template>
-<v-container>
-    <div id="app">
-    <v-form id ="memoList" v-on:submit.prevent >
-        <v-list v-for="item in todos"
-                v-bind:todo="item"
-                v-bind:key="item.id">
-
-            <v-card-text v-model="newItem" 
-                    aria-placeholder="ここに入力"></v-card-text>
-            <v-btn v-on:click="addItem" float:right 
-                max-height: 5px
-                max-width: 5px;>+</v-btn>
-        </v-list>
-    </v-form>
-    </div>
-</v-container>
+  <section class="container">
+    <ul>
+      <li v-for="(todo, index) in todos" :key="index">
+        <input :checked="todo.done" @change="toggle(todo)" type="checkbox" />
+        <span :class="{ done: todo.done }">{{ todo.text }} </span>
+        <button @click="removeTodo(todo)">remove</button>
+      </li>
+    </ul>
+    <p>
+      <input
+        :value="todoText"
+        @input="todoText = $event.target.value"
+        placeholder="newtask"
+      />
+      <button @click="addTodo">add</button>
+    </p>
+    <p>
+      <input
+        :value="searchText"
+        @input="searchText = $event.target.value"
+        placeholder="Search your todo."
+      />
+    </p>
+  </section>
 </template>
+
 <script>
-import vue from 'vue'
- export default vue.extend({
-    
-    props:{
-        id:Number,
-        memo:String,
-        item:String    
-    },
+import { mapMutations } from "vuex";
 
-    data ()  {  
-        return{
-            newItem:'',
-            todos:[]
-        }
-       
+export default {
+  data() {
+    return {
+      todoText: "",
+      searchText: "",
+    };
+  },
+  computed: {
+    todos() {
+      if (this.searchText.length > 0) {
+        return this.$store.state.todos.list.filter((item) =>
+          item.text.toLowerCase().includes(this.searchText.toLowerCase())
+        );
+      }
+      return this.$store.state.todos.list;
+    },
+  },
+  methods: {
+    addTodo() {
+      this.$store.commit("todos/add", this.todoText);
+      this.todoText = "";
+    },
+    ...mapMutations({
+      toggle: "todos/toggle",
+    }),
+    removeTodo(todo) {
+      this.$store.commit("todos/remove", todo);
     },
     
-    methods:{
-        addItem: function(event){
-           if(this.newItem == '')return;
-        
-            let memo = {
-                item: this.newItem,
-                isdone:false
-            };
-           this.todos.push(memo);
-           this.newItem = ' ' ;
-        }
-    }
-})
+    
+  },
+};
 </script>
-<style>
 
+<style>
 </style>
