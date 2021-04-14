@@ -3,6 +3,7 @@
     <v-card  id = "memoCard" >
         <TodoList />
     </v-card>
+    
 </template>
 
 <script>
@@ -12,6 +13,8 @@ export default {
         TodoList
     }
 }
+
+
 </script>
 <style>
 #memoCard{

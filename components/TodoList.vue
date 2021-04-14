@@ -1,19 +1,21 @@
 <template>
   <section class="container">
+    <v-card-actions>
     <ul>
       <li v-for="(todo, index) in todos" :key="index">
         <input :checked="todo.done" @change="toggle(todo)" type="checkbox" />
         <span :class="{ done: todo.done }">{{ todo.text }} </span>
-        <button @click="removeTodo(todo)">remove</button>
+        <v-btn @click="removeTodo(todo)">remove</v-btn>
       </li>
     </ul>
+     </v-card-actions>
     <p>
       <input
         :value="todoText"
         @input="todoText = $event.target.value"
         placeholder="newtask"
       />
-      <button @click="addTodo">add</button>
+      <v-btn @click="addTodo">add</v-btn>
     </p>
     <p>
       <input
@@ -22,6 +24,8 @@
         placeholder="Search your todo."
       />
     </p>
+   
+
   </section>
 </template>
 
@@ -63,4 +67,9 @@ export default {
 </script>
 
 <style>
+
+v-btn{
+  width: 5px;
+  height: 5px;
+}
 </style>
